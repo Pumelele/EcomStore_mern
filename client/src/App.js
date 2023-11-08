@@ -20,12 +20,15 @@ import Profile from './pages/user/Profile';
 import Products from './pages/Admin/Products';
 import UpdateProduct from './pages/Admin/UpdateProduct';
 import CartPage from './pages/CartPage';
+import CategoryProduct from './pages/CategoryProduct';
+import Categories from "./pages/Categories";
 function App() {
   return (
     <>
       <Routes>
         <Route path='/' element={<HomePage/>} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path='/dashboard' element={<PrivateRoute/>}>
           <Route path='user' element={<Dashboard/>} />          
           <Route path='user/orders' element={<Orders/>} />
