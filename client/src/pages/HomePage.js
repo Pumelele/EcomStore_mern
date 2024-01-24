@@ -112,7 +112,7 @@ const HomePage = () => {
   return (
     <Layout>
          <img
-        src="/images/banner.jpeg"
+        src="client/public/images/banner.jpeg"
         className="banner-img"
         alt="bannerimage"
         width={"100%"}

@@ -8,6 +8,8 @@ import { AiFillWarning } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "../styles/CartStyles.css";
+import Form from "antd/es/form/Form";
+import FormItemInput from "antd/es/form/FormItemInput";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
@@ -15,6 +17,7 @@ const CartPage = () => {
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
+  // const [email, setEmail]
   const navigate = useNavigate();
 
   //total price
@@ -113,7 +116,7 @@ const CartPage = () => {
                   <div className="col-md-4">
                     <p>{p.name}</p>
                     <p>{p.description.substring(0, 30)}</p>
-                    <p>Price : {p.price}</p>
+                    <p>Price : R{p.price}</p>
                   </div>
                   <div className="col-md-4 cart-remove-btn">
                     <button
@@ -131,7 +134,7 @@ const CartPage = () => {
               <p>Total | Checkout | Payment</p>
               <hr />
               <h4>Total : {totalPrice()} </h4>
-              {auth?.user?.address ? (
+              {/* {auth?.user?.address ? (
                 <>
                   <div className="mb-3">
                     <h4>Current Address</h4>
@@ -166,7 +169,25 @@ const CartPage = () => {
                     </button>
                   )}
                 </div>
-              )}
+              )} */}
+              {/* QUOTATION FORM*/}
+              <div className="mb-3">
+               <form >
+                   <label>
+                      <h5>Name:</h5>
+                      <input type="text" name="name" />
+                    </label> <br/><br/>
+                    <label>
+                      <h5>E-mail:</h5>
+                      <input type="text" name="email" />
+                    </label> <br/><br/>
+                    <label>
+                      <h5>Contact Number:</h5>
+                      <input type="text" name="phoneNumber" />
+                    </label> <br/><br/>
+                      <input type="submit" value="Submit" className="btn btn-outline-warning" />
+                </form>                               
+              </div>
               <div className="mt-2">
                 {!clientToken || !auth?.token || !cart?.length ? (
                   ""
