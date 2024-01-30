@@ -1,7 +1,5 @@
 import nodemailer from nodemailer;
 import { useCart } from "../client/src/context/cart";
-
-export const sendEmail = async (subject, message, send_to, sent_from, reply_to) => {
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       auth: {
@@ -12,22 +10,45 @@ export const sendEmail = async (subject, message, send_to, sent_from, reply_to) 
         rejectUnauthorized: false,
       },
     });
-  
-    const options = {
-      from: sent_from,
-      to: send_to,
-      replyTo: reply_to,
-      subject: subject,
-      html: message,
-    };
-  
-    // Send Email
-    transporter.sendMail(options, function (err, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
+
+    export const sendEmailController = (req, res) => {
+      try {
+        const { name, email} = req.body;
+        const msg = useCart.toString()
+    
+        //validation
+        if (!name || !email || !msg) {
+          return res.status(500).send({
+            success: false,
+            message: "Please Provide All Fields",
+          });
+        }
+        //email matter
+        transporter.sendMail({
+          to: "rktechnicalplus@gmail.com",
+          from: "rktechnicalplus@gmail.com",
+          subject: "Regarding Mern Portfolio App",
+          html: `
+            <h5>Detail Information</h5>
+            <ul>
+              <li><p>Name : ${name}</p></li>
+              <li><p>Email : ${email}</p></li>
+              <li><p>Message : ${msg}</p></li>
+            </ul>
+          `,
+        });
+    
+        return res.status(200).send({
+          success: true,
+          message: "Your Message Send Successfully",
+        });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+          success: false,
+          message: "Send Email API Error",
+          error,
+        });
       }
-    });
-  };
+    };
   

@@ -17,7 +17,9 @@ const CartPage = () => {
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [email, setEmail]
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
   const navigate = useNavigate();
 
   //total price
@@ -80,6 +82,29 @@ const CartPage = () => {
       setLoading(false);
     }
   };
+
+  //handle submit button 
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      if(!name || !email){
+        toast.error("Please fill in all fields");
+      }
+      const res = await axios.post("/api/v1/email/sendEmail", {name,email, phone});
+
+      //validation success
+      if(res.data.success){
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+      } else {
+        toast.error(res.data.message);
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  };
   return (
     <Layout>
       <div className=" cart-page">
@@ -131,7 +156,7 @@ const CartPage = () => {
             </div>
             <div className="col-md-5 cart-summary ">
               <h2>Cart Summary</h2>
-              <p>Total | Checkout | Payment</p>
+              {/* <p>Total | Checkout | Payment</p> */}
               <hr />
               <h4>Total : {totalPrice()} </h4>
               {/* {auth?.user?.address ? (
@@ -175,7 +200,7 @@ const CartPage = () => {
                <form >
                    <label>
                       <h5>Name:</h5>
-                      <input type="text" name="name" />
+                      <input type="text" name="name" value={name} />
                     </label> <br/><br/>
                     <label>
                       <h5>E-mail:</h5>
@@ -183,9 +208,9 @@ const CartPage = () => {
                     </label> <br/><br/>
                     <label>
                       <h5>Contact Number:</h5>
-                      <input type="text" name="phoneNumber" />
+                      <input type="text" name="phoneNumber" value={phone} />
                     </label> <br/><br/>
-                      <input type="submit" value="Submit" className="btn btn-outline-warning" />
+                      <input type="submit" value="Submit" className="btn btn-outline-warning" onClick={handleSubmit} />
                 </form>                               
               </div>
               <div className="mt-2">
