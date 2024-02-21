@@ -93,14 +93,14 @@ const CartPage = () => {
       if(qty === stock){
       toast.error(`Your selected quantity is above ${stock}`)
       }
-      setQty((prev) => +1)
+      setQty( qty +1)
     }
     //function for qty increase (+)
     const decreaseQty = ()=> {
       if(qty <1){
       toast.error("Your selected quantity is above ${stock}")
       }
-      setQty(-1)
+      setQty(qty-1)
     }
     
   
@@ -177,14 +177,14 @@ const CartPage = () => {
                     <div className="container">
                     <button
                       className="btn btn-warning"
-                      onClick={() => decreaseQty}
+                      onClick={() => decreaseQty(qty)}
                     >
                       -
                     </button>
-                    <input type="text" name="quantity" maxlength="2" max="" size="1" id="qty" />
+                    <input type="text" value={qty} maxlength="2" max="" size="1" id="qty" />
                     <button
                       className="btn btn-success"
-                      onClick={() => addQty}
+                      onClick={() => addQty(qty)}
                     >
                       +
                     </button>
