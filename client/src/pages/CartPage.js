@@ -8,8 +8,9 @@ import { AiFillWarning } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "../styles/CartStyles.css";
-import Form from "antd/es/form/Form";
-import FormItemInput from "antd/es/form/FormItemInput";
+import e from "cors";
+// import Form from "antd/es/form/Form";
+// import FormItemInput from "antd/es/form/FormItemInput";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
@@ -20,6 +21,7 @@ const CartPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
+  const[qty, setQty] = useState(1);
   const navigate = useNavigate();
 
   //total price
@@ -83,20 +85,42 @@ const CartPage = () => {
     }
   };
 
+  //CART ITEM QUANTITY CONTROL
+    const stock = cart?.map((p) => p.quantity)
+    
+    //function for qty increase (+)
+    const addQty = ()=> {
+      if(qty === stock){
+      toast.error(`Your selected quantity is above ${stock}`)
+      }
+      setQty((prev) => +1)
+    }
+    //function for qty increase (+)
+    const decreaseQty = ()=> {
+      if(qty <1){
+      toast.error("Your selected quantity is above ${stock}")
+      }
+      setQty(-1)
+    }
+    
+  
+
   //handle submit button 
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      if(!name || !email){
+      if(!name || !email || !phone){
         toast.error("Please fill in all fields");
       }
-      const res = await axios.post("/api/v1/email/sendEmail", {name,email, phone});
+      const msg = cart?.map((p) => p.name);
+      const res = await axios.post("/api/v1/email/sendEmail", {name,email, phone, msg});
 
       //validation success
       if(res.data.success){
         toast.success(res.data.message);
         setName("");
         setEmail("");
+        setPhone("")
       } else {
         toast.error(res.data.message);
       }
@@ -150,7 +174,23 @@ const CartPage = () => {
                     >
                       Remove
                     </button>
+                    <div className="container">
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => decreaseQty}
+                    >
+                      -
+                    </button>
+                    <input type="text" name="quantity" maxlength="2" max="" size="1" id="qty" />
+                    <button
+                      className="btn btn-success"
+                      onClick={() => addQty}
+                    >
+                      +
+                    </button>
                   </div>
+                  </div>
+                
                 </div>
               ))}
             </div>
@@ -200,15 +240,15 @@ const CartPage = () => {
                <form >
                    <label>
                       <h5>Name:</h5>
-                      <input type="text" name="name" value={name} />
+                      <input type="text" name="name" value={name} onChange={(e)=> setName(e.target.value)} />
                     </label> <br/><br/>
                     <label>
                       <h5>E-mail:</h5>
-                      <input type="text" name="email" />
+                      <input type="email" name="email" value={email} onChange={(e)=> setEmail(e.target.value)}/>
                     </label> <br/><br/>
                     <label>
                       <h5>Contact Number:</h5>
-                      <input type="text" name="phoneNumber" value={phone} />
+                      <input type="text" name="phone" value={phone} onChange={(e)=> setPhone(e.target.value)} />
                     </label> <br/><br/>
                       <input type="submit" value="Submit" className="btn btn-outline-warning" onClick={handleSubmit} />
                 </form>                               
