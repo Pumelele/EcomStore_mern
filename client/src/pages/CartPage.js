@@ -21,7 +21,7 @@ const CartPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
-  const[qty, setQty] = useState(1);
+  
   const navigate = useNavigate();
 
   //total price
@@ -86,21 +86,51 @@ const CartPage = () => {
   };
 
   //CART ITEM QUANTITY CONTROL
-    const stock = cart?.map((p) => p.quantity)
-    
+   
     //function for qty increase (+)
-    const addQty = ()=> {
-      if(qty === stock){
-      toast.error(`Your selected quantity is above ${stock}`)
+    const addQty = (pid)=> {
+      
+      // const selected = id;
+      let myCart = [...cart];
+      let search = myCart.find((item) => item._id === pid);
+
+      if(search===undefined){
+        myCart.push({
+          id: pid,
+          count: 1
+        });
+      } else{
+        search.count+=1
       }
-      setQty( qty +1)
+      return search.count;
+
+
+
+
+      // if(qty === stock){
+      // toast.error(`Your selected quantity is above ${stock}`)
+      // }     
+      // setQty(count);
+      
+      
     }
     //function for qty increase (+)
-    const decreaseQty = ()=> {
-      if(qty <1){
-      toast.error("Your selected quantity is above ${stock}")
+    const decreaseQty = (pid)=> {
+      // if(item.qty <1){
+      // toast.error("Your selected quantity is above ${stock}")
+      // }
+      // setQty(qty-1)
+      let myCart = [...cart];
+      let search = myCart.find((item) => item._id === pid);
+
+      if(search===undefined){
+        myCart.push({
+          id: pid,
+          count: 1
+        });
+      } else{
+        search.count-=1
       }
-      setQty(qty-1)
     }
     
   
@@ -112,7 +142,8 @@ const CartPage = () => {
       if(!name || !email || !phone){
         toast.error("Please fill in all fields");
       }
-      const msg = cart?.map((p) => p.name);
+      
+      const msg = cart?.map((p) => p.name + " x " + p.count);
       const res = await axios.post("/api/v1/email/sendEmail", {name,email, phone, msg});
 
       //validation success
@@ -177,14 +208,18 @@ const CartPage = () => {
                     <div className="container">
                     <button
                       className="btn btn-warning"
-                      onClick={() => decreaseQty(qty)}
+                      onClick={() => decreaseQty(p._id)}
                     >
                       -
                     </button>
-                    <input type="text" value={qty} maxlength="2" max="" size="1" id="qty" />
+                    
+                    {/* <input type="text" value={p._id.count}maxlength="2" max="" size="1" id="qty"  onChange={(e)=>setQty(e.target.value)} /> */}
+                    <>{p.count}</>
+                    
+                    
                     <button
                       className="btn btn-success"
-                      onClick={() => addQty(qty)}
+                      onClick={()=>addQty(p._id)}
                     >
                       +
                     </button>

@@ -15,7 +15,7 @@ import nodemailer from 'nodemailer';
     export const sendEmailController = (req, res) => {
       try {
       
-        const { name, email, phone, msg} = req.body;
+        const { name, email, phone, msg,} = req.body;
         
     
         //validation

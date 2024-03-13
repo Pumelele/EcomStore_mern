@@ -16,7 +16,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [shipping, setShipping] = useState("");
+  const [count, setCount] = useState("");
   const [photo, setPhoto] = useState("");
 
   //get all category
@@ -47,6 +47,7 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("count", count);
       const { data } = axios.post(
         "/api/v1/product/create-product",
         productData
@@ -151,19 +152,13 @@ const CreateProduct = () => {
                 />
               </div>
               <div className="mb-3">
-                <Select
-                  bordered={false}
-                  placeholder="Select Shipping "
-                  size="large"
-                  showSearch
-                  className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
-                >
-                  <Option value="0">No</Option>
-                  <Option value="1">Yes</Option>
-                </Select>
+              <input
+                  type="number"
+                  value={count}
+                  placeholder="write a quantity"
+                  className="form-control"
+                  onChange={(e) => setCount(e.target.value)}
+                />
               </div>
               <div className="mb-3">
                 <button className="btn btn-primary" onClick={handleCreate}>
