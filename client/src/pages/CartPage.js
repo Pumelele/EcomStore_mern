@@ -8,6 +8,9 @@ import { AiFillWarning } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "../styles/CartStyles.css";
+import e from "cors";
+// import Form from "antd/es/form/Form";
+// import FormItemInput from "antd/es/form/FormItemInput";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
@@ -15,6 +18,10 @@ const CartPage = () => {
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  
   const navigate = useNavigate();
 
   //total price
@@ -77,6 +84,82 @@ const CartPage = () => {
       setLoading(false);
     }
   };
+
+  //CART ITEM QUANTITY CONTROL
+   
+    //function for qty increase (+)
+    const addQty = (pid)=> {
+      
+      // const selected = id;
+      let myCart = [...cart];
+      let search = myCart.find((item) => item._id === pid);
+
+      if(search===undefined){
+        myCart.push({
+          id: pid,
+          count: 1
+        });
+      } else{
+        search.count+=1
+      }
+      return search.count;
+
+
+
+
+      // if(qty === stock){
+      // toast.error(`Your selected quantity is above ${stock}`)
+      // }     
+      // setQty(count);
+      
+      
+    }
+    //function for qty increase (+)
+    const decreaseQty = (pid)=> {
+      // if(item.qty <1){
+      // toast.error("Your selected quantity is above ${stock}")
+      // }
+      // setQty(qty-1)
+      let myCart = [...cart];
+      let search = myCart.find((item) => item._id === pid);
+
+      if(search===undefined){
+        myCart.push({
+          id: pid,
+          count: 1
+        });
+      } else{
+        search.count-=1
+      }
+    }
+    
+  
+
+  //handle submit button 
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      if(!name || !email || !phone){
+        toast.error("Please fill in all fields");
+      }
+      
+      const msg = cart?.map((p) => p.name + " x " + p.count);
+      const res = await axios.post("/api/v1/email/sendEmail", {name,email, phone, msg});
+
+      //validation success
+      if(res.data.success){
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPhone("")
+      } else {
+        toast.error(res.data.message);
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  };
   return (
     <Layout>
       <div className=" cart-page">
@@ -113,7 +196,7 @@ const CartPage = () => {
                   <div className="col-md-4">
                     <p>{p.name}</p>
                     <p>{p.description.substring(0, 30)}</p>
-                    <p>Price : {p.price}</p>
+                    <p>Price : R{p.price}</p>
                   </div>
                   <div className="col-md-4 cart-remove-btn">
                     <button
@@ -122,16 +205,36 @@ const CartPage = () => {
                     >
                       Remove
                     </button>
+                    <div className="container">
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => decreaseQty(p._id)}
+                    >
+                      -
+                    </button>
+                    
+                    {/* <input type="text" value={p._id.count}maxlength="2" max="" size="1" id="qty"  onChange={(e)=>setQty(e.target.value)} /> */}
+                    <>{p.count}</>
+                    
+                    
+                    <button
+                      className="btn btn-success"
+                      onClick={()=>addQty(p._id)}
+                    >
+                      +
+                    </button>
                   </div>
+                  </div>
+                
                 </div>
               ))}
             </div>
             <div className="col-md-5 cart-summary ">
               <h2>Cart Summary</h2>
-              <p>Total | Checkout | Payment</p>
+              {/* <p>Total | Checkout | Payment</p> */}
               <hr />
               <h4>Total : {totalPrice()} </h4>
-              {auth?.user?.address ? (
+              {/* {auth?.user?.address ? (
                 <>
                   <div className="mb-3">
                     <h4>Current Address</h4>
@@ -166,7 +269,25 @@ const CartPage = () => {
                     </button>
                   )}
                 </div>
-              )}
+              )} */}
+              {/* QUOTATION FORM*/}
+              <div className="mb-3">
+               <form >
+                   <label>
+                      <h5>Name:</h5>
+                      <input type="text" name="name" value={name} onChange={(e)=> setName(e.target.value)} />
+                    </label> <br/><br/>
+                    <label>
+                      <h5>E-mail:</h5>
+                      <input type="email" name="email" value={email} onChange={(e)=> setEmail(e.target.value)}/>
+                    </label> <br/><br/>
+                    <label>
+                      <h5>Contact Number:</h5>
+                      <input type="text" name="phone" value={phone} onChange={(e)=> setPhone(e.target.value)} />
+                    </label> <br/><br/>
+                      <input type="submit" value="Submit" className="btn btn-outline-warning" onClick={handleSubmit} />
+                </form>                               
+              </div>
               <div className="mt-2">
                 {!clientToken || !auth?.token || !cart?.length ? (
                   ""
