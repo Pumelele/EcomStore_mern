@@ -192,7 +192,7 @@ const CartPage = () => {
                   <div className="col-md-4">
                     <p>{p.name}</p>
                     <p>{p.description.substring(0, 30)}</p>
-                    <p>Price : R{p.price}</p>
+                    {/* <p>Price : R{p.price}</p> */}
                   </div>
                   <div className="col-md-4 cart-remove-btn">
                     <button
@@ -229,7 +229,7 @@ const CartPage = () => {
               <h2>Cart Summary</h2>
               {/* <p>Total | Checkout | Payment</p> */}
               <hr />
-              <h4>Total : {totalPrice()} </h4>
+              <h4>Total : {cart.length} Items</h4>
               {/* {auth?.user?.address ? (
                 <>
                   <div className="mb-3">
