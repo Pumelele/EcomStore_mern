@@ -29,7 +29,7 @@ const CartPage = () => {
     try {
       let total = 0;
       cart?.map((item) => {
-        total = total + item.price;
+        total = total + item.price * item.count;
       });
       return total.toLocaleString("en-ZA", {
         style: "currency",
@@ -93,33 +93,25 @@ const CartPage = () => {
       // const selected = id;
       let myCart = [...cart];
       let search = myCart.find((item) => item._id === pid);
-
-      if(search===undefined){
-        myCart.push({
-          id: pid,
-          count: 1
-        });
-      } else{
-        search.count+=1
+      try {
+        if(search===undefined){
+          myCart.push({
+            id: pid,
+            count: 1
+          });
+        } else{
+          search.count+=1
+          setCart(myCart)
+          
+        }        
+      } catch (error) {
+        console.log(error)
       }
-      return search.count;
-
-
-
-
-      // if(qty === stock){
-      // toast.error(`Your selected quantity is above ${stock}`)
-      // }     
-      // setQty(count);
-      
       
     }
-    //function for qty increase (+)
+    //function for qty increase (-)
     const decreaseQty = (pid)=> {
-      // if(item.qty <1){
-      // toast.error("Your selected quantity is above ${stock}")
-      // }
-      // setQty(qty-1)
+      
       let myCart = [...cart];
       let search = myCart.find((item) => item._id === pid);
 
@@ -128,8 +120,12 @@ const CartPage = () => {
           id: pid,
           count: 1
         });
-      } else{
+      } else{ 
         search.count-=1
+        setCart(myCart)
+      }
+      if(search.count === 0){
+        removeCartItem(pid)
       }
     }
     
@@ -214,7 +210,7 @@ const CartPage = () => {
                     </button>
                     
                     {/* <input type="text" value={p._id.count}maxlength="2" max="" size="1" id="qty"  onChange={(e)=>setQty(e.target.value)} /> */}
-                    <>{p.count}</>
+                    &nbsp;<em>{p.count}</em> &nbsp;
                     
                     
                     <button
