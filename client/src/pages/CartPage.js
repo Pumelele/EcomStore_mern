@@ -114,16 +114,16 @@ const CartPage = () => {
       
       let myCart = [...cart];
       let search = myCart.find((item) => item._id === pid);
-
-      if(search===undefined){
-        myCart.push({
-          id: pid,
-          count: 1
-        });
-      } else{ 
-        search.count-=1
+      search.count-=1
         setCart(myCart)
-      }
+      // if(search===undefined){
+      //   myCart.push({
+      //     id: pid,
+      //     count: 1
+      //   });
+      // } else{ 
+        
+      // }
       if(search.count === 0){
         removeCartItem(pid)
       }
@@ -148,6 +148,7 @@ const CartPage = () => {
         setName("");
         setEmail("");
         setPhone("")
+        setCart([])
       } else {
         toast.error(res.data.message);
       }
@@ -209,7 +210,7 @@ const CartPage = () => {
                       -
                     </button>
                     
-                    {/* <input type="text" value={p._id.count}maxlength="2" max="" size="1" id="qty"  onChange={(e)=>setQty(e.target.value)} /> */}
+                    {/* <input type="text" value={/*p._id.count}maxlength="2" max="" size="1" id="qty"  onChange={(e)=>setQty(e.target.value)} /> */}
                     &nbsp;<em>{p.count}</em> &nbsp;
                     
                     

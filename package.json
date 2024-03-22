@@ -14,7 +14,8 @@
   "author": "Pumelele",
   "license": "MIT",
   "dependencies": {
-    "antd": "^5.11.0",
+    "ant-design": "^1.0.0",
+    "antd": "^5.15.3",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "braintree": "^3.18.0",
