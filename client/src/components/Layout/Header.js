@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useCart } from '../../context/cart';
 const Header = () => {
   const [auth,setAuth] = useAuth();
+  
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -30,7 +31,7 @@ const Header = () => {
           <NavLink to="/" className="nav-link">Home</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to="/category" className="nav-link" >Category</NavLink>
+          <NavLink to="/categories" className="nav-link" >Category</NavLink>
         </li>
         {/* If the user is logged in -> display logout button if not display both login and register page */}
        {

@@ -23,6 +23,14 @@ import CartPage from './pages/CartPage';
 import CategoryProduct from './pages/CategoryProduct';
 import Categories from "./pages/Categories";
 function App() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    fetch("https://ecommerce-store-qu0v.onrender.com")
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message));
+    },[]);
+  
   return (
     <>
       <Routes>

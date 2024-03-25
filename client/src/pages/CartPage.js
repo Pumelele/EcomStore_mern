@@ -32,7 +32,7 @@ const CartPage = () => {
         total = total + item.price * item.count;
       });
       return total.toLocaleString("en-ZA", {
-        style: "currency",
+        style: "",
         currency: "ZAR",
       });
     } catch (error) {
@@ -148,6 +148,7 @@ const CartPage = () => {
         setName("");
         setEmail("");
         setPhone("")
+        localStorage.removeItem("cart");
         setCart([])
       } else {
         toast.error(res.data.message);
