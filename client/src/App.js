@@ -22,6 +22,7 @@ import UpdateProduct from './pages/Admin/UpdateProduct';
 import CartPage from './pages/CartPage';
 import CategoryProduct from './pages/CategoryProduct';
 import Categories from "./pages/Categories";
+import React, { useState, useEffect } from "react";
 function App() {
   const [message, setMessage] = useState("");
 
